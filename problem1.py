@@ -1,6 +1,7 @@
 from logic4e import (
     is_prop_symbol,
     Expr as Expression,
+    expr
 )
 
 
@@ -17,7 +18,7 @@ def pl_true(expression: Expression, model={}):
         return expression
     op, args = expression.op, expression.args
     if is_prop_symbol(op):
-        return model.get(expression)
+        return pl_true(model.get(expression), model)
     elif op == '~':
         p = pl_true(args[0], model)
         if p is None:
@@ -59,3 +60,19 @@ def pl_true(expression: Expression, model={}):
         return pt != qt
     else:
         raise ValueError("illegal operator in logic expression" + str(expression))
+
+
+# Now let's give it a try with a knowledgebase and an expression
+A, B, C, D, E, F = expr('A, B, C, D, E, F')
+kb = {
+    A: True,
+    B: False,
+    C: A|B,
+    D: A&B,
+    E: C&~D,
+    F: ~E|D
+}
+
+for expression in kb.keys():
+    expression: Expression
+    print(f"Expression {expression}: {kb[expression]} evaluates to {pl_true(expression, kb)}")
