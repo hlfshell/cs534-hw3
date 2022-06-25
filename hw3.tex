@@ -24,7 +24,7 @@
 
 \section*{Problem 1}
 
-In problem 1, we are tasked with creating a recursive and linear time agent for following propositonal logic statements. The work associated with this problem can be found in \textbf{problem1.py}.
+In problem 1, we are tasked with creating a recursive and linear time agent for following propositonal logic statements. The work associated with this problem can be found in \textit{problem1.py}.
 
 \section*{Problem 2}
 
@@ -106,5 +106,20 @@ In this section, we consider the following dta input with six inputs and a singu
 
     \end{tabular}
 \end{center}
+
+When we run our code found in \textit{problem4.py}, we find that we can train both a perceptron and decision tree on this data. If given unseen data of $A_{15}:<1, 1, 0, 0, 1, 1>$ with result $T_{15}=1$, we find that both accurately predict this result.
+
+Whne we generate the decision tree, we can output its resulting branches, seen as follows:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.65\textwidth]{tree.png}
+\end{figure}
+
+Our code that utilizes the perceptron makes a perceptron makes a perceptron enacting the following linear equation:
+
+\begin{equation}
+    T = 6x_1 + 0x_2 + 3x_3 - 2x_4 - 4x_5 + 4x_6 - 4
+\end{equation}
 
 \end{document}
