@@ -334,11 +334,270 @@ This next branch doesn't need much in the way of calculations; to save time, we 
 
 Thus we exhaustively formed the following tree:
 
-
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.65\textwidth]{problem3a.png}
+\end{figure}
 
 \subsection*{b.}
 
-Now we utilize Information Gain to create a decision tree for this data. Here we will be calculating the amount of entropy for each branch.
+Now we utilize information gain to create a decision tree for this data. Here we will be calculating the amount of entropy for each branch. The highest information gain is the columns with the least entropy. We calculate entropy via:
+
+\begin{equation}
+    -\sum{c}{i=1}p(x_i)\log_b{p(x_i)}
+\end{equation}
+
+\noindent ...then, when we look at the potential splitting of that column, we look at the information gain from the column via looking at the change in entropy and looking at the weighted sum of post-split entropy and comparing it back to our original entropy. We are looking for larger information gain.
+
+\begin{equation}
+    \sum^{V \epsilon A} \frac{\lvert T_V \rvert}{T} * Entropy(T_V)
+\end{equation}
+
+Looking at our table once again:
+
+\begin{center}
+    \begin{tabular}{ c r r r r }
+        Example & $A_1$ & $A_2$ & $A_3$ & Output $y$\\ 
+        $x_1$ & $1$ & $0$ & $0$ & $0$\\
+        $x_2$ & $1$ & $0$ & $1$ & $0$\\
+        $x_3$ & $0$ & $1$ & $0$ & $0$\\
+        $x_4$ & $1$ & $1$ & $1$ & $1$\\
+        $x_5$ & $1$ & $1$ & $0$ & $1$\\
+    \end{tabular}
+\end{center}
+
+\noindent ...we can begin calculating the information gain for each node $A_i$.
+
+\noindent For $A_1$:
+\begin{equation}
+    -(\frac{4}{5}\log_2{\frac{4}{5}}) + -(\frac{1}{5}\log_2{\frac{1}{5}}) = 0.72
+\end{equation}
+
+\noindent ...and then we look at the information gain for a potential split on $A_1$:
+
+\begin{center}
+    \begin{tabular}{ c r r r r }
+        Example & $A_1$ & $A_2$ & $A_3$ & Output $y$\\ 
+        $x_1$ & $1$ & $0$ & $0$ & $0$\\
+        $x_2$ & $1$ & $0$ & $1$ & $0$\\
+        $x_4$ & $1$ & $1$ & $1$ & $1$\\
+        $x_5$ & $1$ & $1$ & $0$ & $1$\\
+    \end{tabular}
+\end{center}
+
+\begin{equation}
+    -(\frac{2}{4}\log_2{\frac{2}{4}}) + -(\frac{2}{4}\log_2{\frac{2}{4}}) = 1
+\end{equation}
+
+\begin{center}
+    \begin{tabular}{ c r r r r }
+        Example & $A_1$ & $A_2$ & $A_3$ & Output $y$\\ 
+        $x_3$ & $0$ & $1$ & $0$ & $0$\\
+    \end{tabular}
+\end{center}
+
+\begin{equation}
+    -(\frac{0}{1}\log_2{\frac{0}{1}}) + -(\frac{1}{1}\log_2{\frac{1}{1}}) = 0
+\end{equation}
+
+\begin{equation}
+    \frac{4}{5}*1 + \frac{1}{5}*0 = 0.8
+\end{equation}
+
+\noindent For $A_2$:
+\begin{equation}
+    -(\frac{3}{5}\log_2{\frac{3}{5}}) + -(\frac{2/5}\log_2{\frac{2}{5}}) = 0.97
+\end{equation}
+
+\noindent ...and then we look for the information gain if we split on $A_2$:
+
+\begin{center}
+    \begin{tabular}{ c r r r r }
+        Example & $A_1$ & $A_2$ & $A_3$ & Output $y$\\ 
+        $x_3$ & $0$ & $1$ & $0$ & $0$\\
+        $x_4$ & $1$ & $1$ & $1$ & $1$\\
+        $x_5$ & $1$ & $1$ & $0$ & $1$\\
+    \end{tabular}
+\end{center}
+
+\begin{equation}
+    -(\frac{2}{3}\log_2{\frac{2}{3}}) + -(\frac{1}{3}\log_2{\frac{1}{3}}) = 0.92
+\end{equation}
+
+\begin{center}
+    \begin{tabular}{ c r r r r }
+        Example & $A_1$ & $A_2$ & $A_3$ & Output $y$\\ 
+        $x_1$ & $1$ & $0$ & $0$ & $0$\\
+        $x_2$ & $1$ & $0$ & $1$ & $0$\\
+    \end{tabular}
+\end{center}
+
+\begin{equation}
+    -(\frac{0}{2}\log_2{\frac{0}{2}}) + -(\frac{2}{2}\log_2{\frac{2}{2}}) = 0.0
+\end{equation}
+
+\begin{equation}
+    \frac{3}{5}*0.92 + \frac{2}{5}*0 = 0.55
+\end{equation}
+
+\noindent For $A_3$:
+\begin{equation}
+    -(\frac{2}{5}\log_2{\frac{2}{5}}) + -(\frac{3/5}\log_2{\frac{3}{5}}) = 0.97
+\end{equation}
+
+\noindent ...and now exploring the information gain if we split on $A_3$:
+
+\begin{center}
+    \begin{tabular}{ c r r r r }
+        Example & $A_1$ & $A_2$ & $A_3$ & Output $y$\\ 
+        $x_2$ & $1$ & $0$ & $1$ & $0$\\
+        $x_4$ & $1$ & $1$ & $1$ & $1$\\
+    \end{tabular}
+\end{center}
+
+\begin{equation}
+    -(\frac{1}{2}\log_2{\frac{1}{2}}) + -(\frac{1}{2}\log_2{\frac{1}{2}}) = 1.0
+\end{equation}
+
+\begin{center}
+    \begin{tabular}{ c r r r r }
+        Example & $A_1$ & $A_2$ & $A_3$ & Output $y$\\ 
+        $x_1$ & $1$ & $0$ & $0$ & $0$\\
+        $x_3$ & $0$ & $1$ & $0$ & $0$\\
+        $x_5$ & $1$ & $1$ & $0$ & $1$\\
+    \end{tabular}
+\end{center}
+
+\begin{equation}
+    -(\frac{1}{3}\log_2{\frac{1}{3}}) + -(\frac{2}{3}\log_2{\frac{2}{3}}) = 0.92
+\end{equation}
+
+\begin{equation}
+    \frac{2}{5}*1.0 + \frac{3}{5}*0.92 = 0.95
+\end{equation}
+
+\noindent ...which leads us to this entropy for each $A_i$ and the information gain if we split on each.
+
+\begin{center}
+    \begin{tabular}{l r r r}
+        Input & Entropy & Split Entropy & Gain\\
+        $A_1$ & 0.72 & 0.80 & -0.08\\
+        $A_2$ & 0.97 & 0.55 & 0.42\\
+        $A_3$ & 0.97 & 0.95 & 0.02\\
+    \end{tabular}
+\end{center}
+
+From this we can see we have the highest information gain if we split on $A_2$. We continue this process for each of the resulting branches from this split.
+
+\noindent \textbf{$A_2=1$}
+
+\begin{center}
+    \begin{tabular}{ c r r r r }
+        Example & $A_1$ & $A_2$ & $A_3$ & Output $y$\\ 
+        $x_3$ & $0$ & $1$ & $0$ & $0$\\
+        $x_4$ & $1$ & $1$ & $1$ & $1$\\
+        $x_5$ & $1$ & $1$ & $0$ & $1$\\
+    \end{tabular}
+\end{center}
+
+\noindent \textbf{$A_1$:}
+
+\begin{equation}
+    -(\frac{2}{3}\log_2{\frac{2}{3}}) + -(\frac{1}{3}\log_2{\frac{1}{3}}) = 0.92
+\end{equation}
+
+\noindent ...and now exploring the information gain if we split on $A_1$:
+
+\begin{center}
+    \begin{tabular}{ c r r r r }
+        Example & $A_1$ & $A_2$ & $A_3$ & Output $y$\\ 
+        $x_4$ & $1$ & $1$ & $1$ & $1$\\
+        $x_5$ & $1$ & $1$ & $0$ & $1$\\
+    \end{tabular}
+\end{center}
+
+\begin{equation}
+    -(\frac{2}{2}\log_2{\frac{2}{2}}) + -(\frac{0}{2}\log_2{\frac{0}{2}}) = 0.0
+\end{equation}
+
+\begin{center}
+    \begin{tabular}{ c r r r r }
+        Example & $A_1$ & $A_2$ & $A_3$ & Output $y$\\ 
+        $x_3$ & $0$ & $1$ & $0$ & $0$\\
+    \end{tabular}
+\end{center}
+
+\begin{equation}
+    -(\frac{0}{1}\log_2{\frac{0}{1}}) + -(\frac{1}{1}\log_2{\frac{1}{1}}) = 0.0
+\end{equation}
+
+\noindent for an obvious weighted entropy of 0.0.
+
+\noindent \textbf{$A_3$:}
+
+\begin{equation}
+    -(\frac{1}{3}\log_2{\frac{1}{3}}) + -(\frac{2}{3}\log_2{\frac{2}{3}}) = 0.92
+\end{equation}
+
+\noindent ...and now exploring the information gain if we split on $A_3$:
+
+\begin{center}
+    \begin{tabular}{ c r r r r }
+        Example & $A_1$ & $A_2$ & $A_3$ & Output $y$\\ 
+        $x_4$ & $1$ & $1$ & $1$ & $1$\\
+    \end{tabular}
+\end{center}
+
+\begin{equation}
+    -(\frac{1}{1}\log_2{\frac{1}{1}}) + -(\frac{1}{1}\log_2{\frac{0}{1}}) = 0.0
+\end{equation}
+
+\begin{center}
+    \begin{tabular}{ c r r r r }
+        Example & $A_1$ & $A_2$ & $A_3$ & Output $y$\\ 
+        $x_3$ & $0$ & $1$ & $0$ & $0$\\
+        $x_5$ & $1$ & $1$ & $0$ & $1$\\
+    \end{tabular}
+\end{center}
+
+\begin{equation}
+    -(\frac{1}{2}\log_2{\frac{1}{2}}) + -(\frac{1}{2}\log_2{\frac{1}{2}}) = 1.0
+\end{equation}
+
+\begin{equation}
+    \frac{1}{3} * 0.0 + \frac{2}{3} * 1.0 = 0.67
+\end{equation}
+
+\begin{center}
+    \begin{tabular}{l r r r}
+        Input & Entropy & Split Entropy & Gain\\
+        $A_1$ & 0.92 & 0.0 & 0.92\\
+        $A_3$ & 0.92 & 0.67 & 0.25 \\
+    \end{tabular}
+\end{center}
+
+Thus we would further split on $A_1$. This can be mapped directly to $A_3=y$ at this point as we've hit minimum entropy, and end this node here.
+
+Then we can begin to explore what happens for when $A_2=0$, based on our first split.
+
+\noindent \textbf{$A_2=0$:}
+
+\begin{center}
+    \begin{tabular}{ c r r r r }
+        Example & $A_1$ & $A_2$ & $A_3$ & Output $y$\\ 
+        $x_1$ & $1$ & $0$ & $0$ & $0$\\
+        $x_2$ & $1$ & $0$ & $1$ & $0$\\
+    \end{tabular}
+\end{center}
+
+Here we don't even have to calculate much - if $A_3=0$, then $y=0$.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.65\textwidth]{problem3b.png}
+\end{figure}
+
 
 \section*{Problem 4}
 
@@ -360,7 +619,7 @@ In this section, we consider the following data input with six inputs and a sing
 
 When we run our code found in \textit{problem4.py}, we find that we can train both a perceptron and decision tree on this data. If given unseen data of $A_{15}:<1, 1, 0, 0, 1, 1>$ with result $T_{15}=1$, we find that both accurately predict this result.
 
-Whne we generate the decision tree, we can output its resulting branches, seen as follows:
+When we generate the decision tree, we can output its resulting branches, seen as follows:
 
 \begin{figure}[H]
     \centering
